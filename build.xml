@@ -1,0 +1,123 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE project[]>
+<project name="FlareKids" default="usage" basedir=".">
+	<!-- Initialize properties -->
+	<property environment="env"/>
+		<property name="ws.home" value="${basedir}" />
+		<property name="ws.jars" value="${basedir}/jarFiles/" />
+		<property name="test.dest" value="${ws.home}/build" />
+		<property name="test.src" value="${ws.home}/src" />
+		<property name="ng.result" value="test-output" />
+ 
+		
+		<path id="mail.path">
+		    <pathelement location="${basedir}/jarFiles/mail.jar"/>
+		    <pathelement location="${basedir}/jarFiles/ant-classloadertask.jar"/>
+		</path>
+ 
+ 		<target name="setClassPath" unless="test.classpath">
+ 			<path id="classpath_jars">
+ 				<fileset dir="${basedir}/jarFiles/" includes="*.jar"/>
+ 				
+		<fileset dir="${javamail.dir}/lib"><include name="**/*.jar"/></fileset>
+		<pathelement location="${jlb.dir}/activation.jar" />
+		
+ 				</path>
+ 				<pathconvert pathsep=":" property="test.classpath" refid="classpath_jars" />
+ 		</target>
+ 		
+ 		<target name="init" depends="setClassPath">
+ 			<tstamp>
+ 				<format property="start.time" pattern="MM/dd/yyyy hh:mm aa"/>
+ 			</tstamp>
+ 			<condition property="ANT" value="${env.ANT_HOME}/bin/ant.bat" else="${env.ANT_HOME}/bin/ant">
+ 				<os family="windows" />
+ 			</condition>
+ 			<taskdef name="testng" classname="org.testng.TestNGAntTask">
+ 			<classpath path="${test.classpath}"/>
+ 			</taskdef>
+ 		</target>
+ 		
+ 		
+ 		<!-- Clean -->
+	<target name="clean">
+		<delete dir="$[test.dest]" />
+	</target>
+
+	<!-- Compile -->
+	<target name="compile" depends="init, clean">
+		<delete includeemptydirs="true" quiet="true">
+			<fileset dir="${test.dest}" includes="**/*"></fileset>
+		</delete>
+		<echo message="making directory..." />
+		<mkdir dir="${test.dest}" />
+		<echo message="classpath----: ${test.classpath}" />
+		<echo message="Compiling..." />
+		<javac debug="true" destdir="${test.dest}" srcdir="${test.src}"
+			target="1.8" classpath="${test.classpath}">
+		</javac>
+	</target>
+
+	<!-- build -->
+	<target name="build" depends="init">
+
+	</target>
+
+	<!-- run -->
+	<target name="run" depends="compile">
+		<testng classpath="${test.classpath}:${test.dest}" suitename="PlayStoreDemoProject">
+			<xmlfileset dir="${ws.home}" includes="runn.xml"/>
+		</testng>
+	</target>
+	<target name="usage">
+		<echo>
+			ant run will execute the test
+		</echo>
+	</target>
+	<path id="test.c">
+		<fileset dir="${basedir}/jarFiles/"
+			includes="*.jar" />
+	</path>
+	<target name="makeXsltReports">
+		<mkdir dir="${ws.home}/XSLT_Reports/output" />
+		<xslt in="test-output/testng-results.xml" style="src/xsltReports/testng-results.xsl"
+			out="${ws.home}/XSLT_Reports/output/index.html" classpathref="test.c" >
+			<param name="testNgXslt.outputDir" expression="${ws.home}/XSLT_Reports/output" />
+			
+			<param expression="FAIL,SKIP,PASS,CONF,BY_CLASS" name="testNgXslt.testDetailsFilter" />
+			<param expression="true" name="testNgXslt.sortTestCaseLinks" /> 
+			<param name="testNgXslt.showRuntimeTotals" expression="true" />
+			 <param name="testNgXslt.cssFile" expression="custom.css" />
+            <param name="testNgXslt.reportTitle" expression="GUI Regression Reports" />
+		</xslt>
+	</target>
+
+
+
+	<target name="sendMail" depends="makeXsltReports">
+
+		<!-- Compressing all the output file of XSLT report -->
+		<zip destfile="${ws.home}/XSLT_Reports/output.zip" basedir="${ws.home}/XSLT_Reports/output" />
+		<taskdef name="classloadertask" />
+		<classloadertask classpathRef="mail.path" loader="thread"/>
+		<mail tolist="sukesh@codecraft.co.in"
+
+				from="cashish.raj@gmail.com" subject="Flare Kids" mailhost="smtp.gmail.com"
+
+					mailport="465" ssl="true" user="cashish.raj@gmail.com" password="mangalore123">
+
+				<attachments>
+
+					<fileset dir="${ws.home}/XSLT_Reports/">
+
+					<include name="**/*.zip" />
+
+					</fileset>
+
+			</attachments>
+
+			</mail>
+
+
+	</target>
+</project>

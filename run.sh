@@ -1,0 +1,1 @@
+java -cp /Users/Chethan/Documents/workspace/FlareKids_Version2/bin:/Users/Chethan/Documents/workspace/FlareKids_Version2/JarFiles/*:/Users/Chethan/Documents/workspace/FlareKids_Version2/JarFiles/testng-6.9.4.jar org.testng.TestNG /Users/Chethan/Documents/workspace/FlareKids_Version2/testng.xml

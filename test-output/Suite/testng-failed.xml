@@ -1,0 +1,18 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE suite SYSTEM "http://testng.org/testng-1.0.dtd">
+<suite name="Failed suite [Suite]" allow-return-values="true">
+  <parameter name="deviceName" value="17a95bca61b8c74516df227901f8d474ed58bbd9"/>
+  <parameter name="platformName" value="iOS"/>
+  <test name="Test(failed)">
+    <parameter name="platformName" value="iOS"/>
+    <parameter name="deviceName" value="17a95bca61b8c74516df227901f8d474ed58bbd9"/>
+    <classes>
+      <class name="CCLaunchApp.CCLogin">
+        <methods>
+          <include name="LaunchApp"/>
+          <include name="SignUp"/>
+        </methods>
+      </class> <!-- CCLaunchApp.CCLogin -->
+    </classes>
+  </test> <!-- Test(failed) -->
+</suite> <!-- Failed suite [Suite] -->

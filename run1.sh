@@ -1,0 +1,2 @@
+set classpath="/Users/Chethan/Documents/workspace/CCFlareKids2/bin:/Users/Chethan/Documents/workspace/CCFlareKids2/JarFiles/*:/Users/Chethan/Documents/workspace/CCFlareKids2/JarFiles/testng-6.9.4.jar"
+java org.testng.TestNG /Users/Chethan/Documents/workspace/CCFlareKids2/testng.xml
